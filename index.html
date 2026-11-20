@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Radar</title>
+<meta name="description" content="This week's top trending open-source AI agent repositories on GitHub.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307070a'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23c6ff3d' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='9' fill='none' stroke='%23c6ff3d' stroke-width='3' opacity='.6'/%3E%3Cpath d='M32 32 L50 18' stroke='%23c6ff3d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#07070a;--bg2:#0e0e13;--card:#101017;--line:#23232d;--line2:#34343f;
+  --fg:#f2f2ee;--mute:#9a9aa6;--dim:#62626e;
+  --acc:#c6ff3d;--acc-ink:#0a0d00;--acc-glow:rgba(198,255,61,.35);--acc-soft:rgba(198,255,61,.10);
+  --display:"Space Grotesk","Archivo Black","Helvetica Neue",Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5;overflow-x:hidden;
+  background-image:radial-gradient(1200px 600px at 85% -10%,rgba(198,255,61,.07),transparent 60%),linear-gradient(var(--line) 1px,transparent 1px);
+  background-size:auto,100% 96px;background-attachment:fixed,scroll}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1560px;margin:0 auto;padding:0 clamp(16px,4vw,56px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+header.top{padding-top:clamp(28px,6vw,80px);padding-bottom:clamp(20px,3vw,36px);border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc);display:inline-block;margin-right:8px;animation:pulse 2.2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(52px,13vw,200px);line-height:.84;letter-spacing:-.055em;margin:0;min-width:0;overflow-wrap:anywhere}
+h1 em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--fg)}
+h1 .acc{color:var(--acc)}
+.sub{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:end}
+.sub p{margin:0;color:var(--mute);max-width:52ch;font-size:clamp(15px,1.4vw,18px)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:12px}
+.pill{border:1px solid var(--line2);border-radius:999px;padding:5px 11px;color:var(--mute);white-space:nowrap}
+.pill b{color:var(--fg);font-weight:600}
+.pill.live b{color:var(--acc)}
+@media(min-width:900px){
+  header.top{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr);align-items:end}
+  .sub{justify-items:end;text-align:right}
+  .meta{justify-content:flex-end}
+}
+
+/* controls */
+.bar{position:sticky;top:0;z-index:10;background:rgba(7,7,10,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar-head{display:flex;gap:12px;align-items:center;padding:12px 0;flex-wrap:wrap}
+.search{flex:1 1 220px;min-width:0;position:relative}
+.search input{width:100%;background:var(--bg2);border:1px solid var(--line2);color:var(--fg);font:inherit;font-size:15px;padding:11px 14px 11px 40px;border-radius:12px;transition:border-color .2s,box-shadow .2s}
+.search input::placeholder{color:var(--dim)}
+.search input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--dim)}
+.count{font-family:var(--mono);font-size:13px;color:var(--mute);white-space:nowrap}
+.count b{color:var(--acc);font-size:15px}
+.btn{appearance:none;background:var(--bg2);border:1px solid var(--line2);color:var(--fg);font:inherit;font-size:13px;padding:9px 13px;border-radius:10px;cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .15s}
+.btn:hover{border-color:var(--mute)}
+.btn:active{transform:scale(.97)}
+.btn[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);font-weight:600}
+.ftoggle{display:none;align-items:center;gap:8px}
+.ftoggle .chev{transition:transform .3s var(--ease)}
+.ftoggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.ftoggle .n{background:var(--acc);color:var(--acc-ink);border-radius:999px;padding:0 7px;font-size:11px;font-weight:700}
+.ftoggle .n:empty{display:none}
+.filters{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:0 0 14px}
+.frow{display:flex;gap:10px 14px;align-items:flex-start;min-width:0}
+.flabel{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding-top:8px;flex:0 0 74px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.chip{appearance:none;font:inherit;font-size:12px;border:1px solid var(--line2);background:transparent;color:var(--mute);padding:5px 10px;border-radius:999px;cursor:pointer;transition:all .18s;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip:hover{color:var(--fg);border-color:var(--mute)}
+.chip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);font-weight:600}
+.chip small{opacity:.6;margin-left:4px;font-family:var(--mono)}
+.sorts{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.dir{font-family:var(--mono)}
+.clear{background:none;border:none;color:var(--mute);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:inherit;font-size:12px;padding:6px 4px}
+.clear:hover{color:var(--acc)}
+@media(max-width:599.98px){
+  .ftoggle{display:inline-flex}
+  .filters{display:grid;grid-template-rows:0fr;padding:0;transition:grid-template-rows .35s var(--ease),padding .35s var(--ease);overflow:hidden}
+  .filters>.inner{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s .35s}
+  .filters.open{grid-template-rows:1fr;padding:0 0 14px}
+  .filters.open>.inner{visibility:visible;transition:visibility 0s 0s}
+  .frow{flex-direction:column;gap:6px}
+  .flabel{padding-top:0;flex:none}
+  .chips.topics{max-height:180px;overflow-y:auto}
+}
+.filters>.inner{display:grid;gap:12px;min-width:0}
+
+/* grid */
+main{padding:clamp(20px,3vw,40px) 0 80px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(12px,1.4vw,20px)}
+@media(min-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1180px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1500px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* asymmetric: first card spans wide when sorted by stars desc w/o filters */
+.grid.hero .card:first-child{grid-column:1/-1}
+@media(min-width:1180px){.grid.hero .card:first-child{grid-column:span 2}}
+
+.card{position:relative;min-width:0;background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:clamp(16px,1.8vw,24px);display:flex;flex-direction:column;gap:12px;overflow:hidden;
+  transition:transform .35s var(--ease),border-color .3s,box-shadow .35s var(--ease);
+  animation:rise .6s var(--ease) both;animation-delay:calc(var(--i,0) * 35ms)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.card:hover,.card:focus-within{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 0 0 1px var(--acc-glow),0 18px 50px -18px var(--acc-glow)}
+.card-top{display:flex;gap:14px;align-items:flex-start;min-width:0}
+.rank{font-family:var(--display);font-weight:800;font-size:clamp(44px,5vw,76px);line-height:.8;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px var(--line2);flex:none;transition:color .3s,-webkit-text-stroke-color .3s;font-variant-numeric:tabular-nums}
+.card:hover .rank,.card:focus-within .rank{-webkit-text-stroke-color:var(--acc);color:var(--acc-soft)}
+.card:nth-child(-n+3) .rank{color:var(--fg);-webkit-text-stroke-color:transparent}
+.card:nth-child(1) .rank{color:var(--acc)}
+.title{min-width:0;flex:1}
+.owner{font-family:var(--mono);font-size:12px;color:var(--dim);overflow-wrap:anywhere}
+.name{font-family:var(--display);font-weight:700;font-size:clamp(19px,1.7vw,24px);line-height:1.12;letter-spacing:-.02em;margin:2px 0 0;overflow-wrap:anywhere}
+.name a{text-decoration:none;background-image:linear-gradient(var(--acc),var(--acc));background-size:0 2px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .35s var(--ease)}
+.card:hover .name a,.name a:focus-visible{background-size:100% 2px}
+.desc{color:var(--mute);font-size:14px;margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:3em;transition:max-height .45s var(--ease),color .3s}
+.card:hover .desc,.card:focus-within .desc{-webkit-line-clamp:12;max-height:18em;color:#c9c9cf}
+.desc.none{font-style:italic;color:var(--dim)}
+.heat{display:grid;gap:6px}
+.heat-row{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;color:var(--mute);flex-wrap:wrap}
+.heat-row .stars{color:var(--fg);font-size:15px;font-weight:600}
+.heat-row .stars::before{content:"★ ";color:var(--acc)}
+.track{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.fill{height:100%;border-radius:99px;background:linear-gradient(90deg,rgba(198,255,61,.25),var(--acc));box-shadow:0 0 12px var(--acc-glow);transform-origin:left;width:var(--w);animation:grow 1s var(--ease) both;animation-delay:calc(var(--i,0) * 35ms + 150ms)}
+@keyframes grow{from{transform:scaleX(0)}}
+.ctopics{display:flex;flex-wrap:wrap;gap:5px;min-width:0}
+.ctopic{font-size:11px;font-family:var(--mono);border:1px solid var(--line);color:var(--dim);padding:2px 8px;border-radius:99px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:all .25s}
+.card:hover .ctopic,.card:focus-within .ctopic{border-color:var(--line2);color:var(--mute)}
+.ctopic.hit,.card:hover .ctopic.hit{border-color:var(--acc);color:var(--acc);background:var(--acc-soft)}
+.foot{margin-top:auto;display:flex;gap:8px 14px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:10px;border-top:1px solid var(--line)}
+.foot .lang::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mute);margin-right:6px;vertical-align:1px}
+.card:hover .foot .lang::before{background:var(--acc)}
+.foot .ago{margin-left:auto}
+mark{background:var(--acc);color:var(--acc-ink);border-radius:3px;padding:0 2px}
+
+.empty{display:none;text-align:center;padding:80px 20px;border:1px dashed var(--line2);border-radius:18px}
+.empty.show{display:block}
+.empty .big{font-family:var(--display);font-size:clamp(40px,8vw,96px);font-weight:800;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px var(--line2);line-height:1}
+.empty p{color:var(--mute)}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--dim);font-family:var(--mono);font-size:12px}
+footer .wrap{display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .card:hover,.card:focus-within{transform:none}
+}
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <div>
+    <div class="kicker"><span><span class="dot" aria-hidden="true"></span>GitHub · weekly</span><span>Topics: ai-agents / llm-agents / agentic-ai / autonomous-agents</span></div>
+    <h1>Agent<br><em>Radar</em><span class="acc">.</span></h1>
+  </div>
+  <div class="sub">
+    <p>The most-starred open-source AI agent repos that shipped commits in the last seven days.</p>
+    <div class="meta">
+      <span class="pill">Snapshot: <b id="snap">—</b></span>
+      <span class="pill" id="srcpill">Data: <b id="src">embedded</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-head">
+      <label class="search">
+        <span class="sr">Search repositories</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search name, owner, description, topic…" autocomplete="off">
+      </label>
+      <button class="btn ftoggle" id="ftoggle" type="button" aria-expanded="false" aria-controls="filters">
+        Filters <span class="n" id="fcount"></span>
+        <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <span class="count" aria-live="polite"><b id="count">0</b> / <span id="total">0</span> repos</span>
+    </div>
+    <div class="filters" id="filters">
+      <div class="inner">
+        <div class="frow">
+          <span class="flabel" id="lbl-sort">Sort</span>
+          <div class="sorts" role="group" aria-labelledby="lbl-sort">
+            <button class="btn" type="button" data-sort="stars">Stars</button>
+            <button class="btn" type="button" data-sort="forks">Forks</button>
+            <button class="btn" type="button" data-sort="pushed">Recent</button>
+            <button class="btn" type="button" data-sort="name">Name</button>
+            <button class="btn dir" type="button" id="dir" aria-label="Toggle sort direction">↓ desc</button>
+          </div>
+        </div>
+        <div class="frow">
+          <span class="flabel" id="lbl-lang">Language</span>
+          <div class="chips" id="langs" role="group" aria-labelledby="lbl-lang"></div>
+        </div>
+        <div class="frow">
+          <span class="flabel" id="lbl-topic">Topics</span>
+          <div class="chips topics" id="topics" role="group" aria-labelledby="lbl-topic"></div>
+        </div>
+        <div class="frow"><span class="flabel"></span><button class="clear" type="button" id="clear">Reset all filters</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" role="status">
+    <div class="big">0 signals</div>
+    <p>No repos match these filters. Try a broader search or reset.</p>
+    <button class="btn" type="button" id="clear2">Reset filters</button>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>Source: GitHub Search API · pushed within 7 days · sorted by stars</span><span id="foot-snap"></span></div></footer>
+
+<script type="application/json" id="seed">{"generated_at":"2026-11-20T11:43:08Z","repos":[{"name":"ECC","owner":"affaan-m","full_name":"affaan-m/ECC","description":"The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.","stars":307496,"forks":45268,"language":"JavaScript","topics":["ai-agents","anthropic","claude","claude-code","developer-tools","llm","mcp","productivity"],"pushed_at":"2026-11-20T01:13:45Z","url":"https://github.com/affaan-m/ECC"},{"name":"deepseek-harness","owner":"deepseek-ai","full_name":"deepseek-ai/deepseek-harness","description":"DeepSeek Harness: Everything is a Plugin.","stars":284526,"forks":35367,"language":"TypeScript","topics":["ai-agents","cordis","dsh","dsh-plugin"],"pushed_at":"2026-11-18T12:48:10Z","url":"https://github.com/deepseek-ai/deepseek-harness"},{"name":"hermes-agent","owner":"NousResearch","full_name":"NousResearch/hermes-agent","description":"The agent that grows with you","stars":264871,"forks":59827,"language":"Python","topics":["ai","ai-agent","ai-agents","anthropic","chatgpt","claude","claude-code","codex","hermes","hermes-agent","llm","nous-research","openai"],"pushed_at":"2026-11-20T11:16:18Z","url":"https://github.com/NousResearch/hermes-agent"},{"name":"firecrawl","owner":"firecrawl","full_name":"firecrawl/firecrawl","description":"Knowledge infrastructure to make your agents smarter. Search, scrape and 550+ data providers through one API.","stars":204725,"forks":10731,"language":"TypeScript","topics":["ai","ai-agents","ai-crawler","ai-scraping","ai-search","crawler","data-extraction","html-to-markdown","llm","markdown","scraper","scraping","web-crawler","web-data","web-data-extraction","web-scraper","web-scraping","web-search","webscraping"],"pushed_at":"2026-11-20T11:37:23Z","url":"https://github.com/firecrawl/firecrawl"},{"name":"AutoGPT","owner":"Significant-Gravitas","full_name":"Significant-Gravitas/AutoGPT","description":"AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.","stars":188120,"forks":45851,"language":"Python","topics":["agentic-ai","agents","ai","artificial-intelligence","autonomous-agents","claude","gpt","llama-api","llm","openai","python"],"pushed_at":"2026-11-20T11:39:58Z","url":"https://github.com/Significant-Gravitas/AutoGPT"},{"name":"dify","owner":"langgenius","full_name":"langgenius/dify","description":"Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.","stars":161561,"forks":25542,"language":"Python","topics":["agent","agentic-ai","agentic-framework","agentic-workflow","ai","automation","claude","deepseek","genai","gpt","llm","low-code","mcp","nextjs","no-code","openai","python","skills","workflow"],"pushed_at":"2026-11-20T11:37:26Z","url":"https://github.com/langgenius/dify"},{"name":"graphify","owner":"Graphify-Labs","full_name":"Graphify-Labs/graphify","description":"Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.","stars":150892,"forks":14522,"language":"Python","topics":["ai-agents","antigravity","ast","claude-code","code-analysis","code-search","codex","cursor","developer-tools","gemini","graphify","graphrag","knowledge-graph","leiden","llm","mcp","openclaw","rag","skills","tree-sitter"],"pushed_at":"2026-11-20T02:40:11Z","url":"https://github.com/Graphify-Labs/graphify"},{"name":"langchain","owner":"langchain-ai","full_name":"langchain-ai/langchain","description":"The agent engineering platform.","stars":149964,"forks":25159,"language":"Python","topics":["agents","ai","ai-agents","anthropic","chatgpt","deepagents","enterprise","framework","gemini","generative-ai","langchain","langgraph","llm","multiagent","open-source","openai","pydantic","python","rag","typescript"],"pushed_at":"2026-11-20T08:51:44Z","url":"https://github.com/langchain-ai/langchain"},{"name":"orca","owner":"stablyai","full_name":"stablyai/orca","description":"Orca lets you run a fleet of coding agents (e.g. Claude Code, Codex) with your own subscription. Available on desktop, mobile and remote runtime.","stars":130451,"forks":8305,"language":"TypeScript","topics":["agent-ide","ai-agents","automation","bot","claude-code","codex","ghostty","grok-bot","hermes-agent","mobile-app","muse","openclaw","opencode","orchestration","pi","runtime","swarm","terminal","worktrees","yc-backed"],"pushed_at":"2026-11-20T11:41:17Z","url":"https://github.com/stablyai/orca"},{"name":"browser-use","owner":"browser-use","full_name":"browser-use/browser-use","description":"Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.","stars":121582,"forks":13592,"language":"Python","topics":["ai-agents","ai-tools","browser-agent","browser-automation","browser-use","cdp","cloud-browser","computer-use","headless-browser","llm","mcp","playwright","python","remote-browser","stealth-browser","web-automation","web-scraping"],"pushed_at":"2026-11-20T03:57:10Z","url":"https://github.com/browser-use/browser-use"},{"name":"claude-mem","owner":"thedotmack","full_name":"thedotmack/claude-mem","description":"Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More","stars":118548,"forks":10314,"language":"TypeScript","topics":["ai","ai-agents","ai-memory","anthropic","artificial-intelligence","chromadb","claude","claude-agent-sdk","claude-agents","claude-code","claude-code-plugin","claude-skills","embeddings","long-term-memory","mem0","memory-engine","openmemory","rag","sqlite","supermemory"],"pushed_at":"2026-11-19T18:36:00Z","url":"https://github.com/thedotmack/claude-mem"},{"name":"paperclip","owner":"paperclipai","full_name":"paperclipai/paperclip","description":"The open-source app everyone uses to manage agents at work","stars":115346,"forks":19146,"language":"TypeScript","topics":["acpx","agent-orchestration","agent-skills","agentic-ai","ai-agents","ai-engineering","ai-governance","ai-tools","autonomous-agents","claude","claude-code","claude-skills","codex","hermes","llm","mcp","multi-agent","openclaw","project-management","workflow-automation"],"pushed_at":"2026-11-20T11:11:57Z","url":"https://github.com/paperclipai/paperclip"},{"name":"gemini-cli","owner":"google-gemini","full_name":"google-gemini/gemini-cli","description":"An open-source AI agent that brings the power of Gemini directly into your terminal.","stars":108953,"forks":14965,"language":"TypeScript","topics":["ai","ai-agents","cli","gemini","gemini-api","mcp-client","mcp-server"],"pushed_at":"2026-11-20T01:12:42Z","url":"https://github.com/google-gemini/gemini-cli"},{"name":"archify","owner":"tt-a1i","full_name":"tt-a1i/archify","description":"Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more.","stars":98212,"forks":6715,"language":"JavaScript","topics":["agent-skills","ai-agents","architecture-diagram","claude-code","claude-skills","codex","coding-agents","deepseek-harness","developer-tools","diagrams","diagrams-as-code","dsh-plugin","flowchart","llm","mermaid","opencode","sequence-diagram","software-architecture","system-design","visualization"],"pushed_at":"2026-11-20T00:24:18Z","url":"https://github.com/tt-a1i/archify"},{"name":"ragflow","owner":"infiniflow","full_name":"infiniflow/ragflow","description":"RAGFlow is an agent-native database: a Retrieval-Augmented Generation (RAG) engine that grew into context infrastructure.","stars":94474,"forks":11367,"language":"Go","topics":["agent-harness","agent-native-database","agentic-ai","agentic-retrieval","agentic-search","ai","ai-agents","context-engine","context-engineering","context-management","harness-engineering","knowledge-compilation","rag","retrieval-augmented-generation","retrieval-harness","search-harness"],"pushed_at":"2026-11-20T11:37:47Z","url":"https://github.com/infiniflow/ragflow"},{"name":"OmniRoute","owner":"cheaper-inference","full_name":"cheaper-inference/OmniRoute","description":"Never stop coding. Free MIT AI gateway: one endpoint, 375 providers (150+ free), 1,400+ models Kimi, Claude, GPT, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 900+ contributors","stars":89063,"forks":13762,"language":"TypeScript","topics":["a2a","ai-agents","ai-gateway","anthropic","claude","claude-code","cline","codex","copilot","cursor","deepseek","free-ai","gemini","kimi","llm-gateway","mcp","openai","openai-proxy","qwen","token-saver"],"pushed_at":"2026-11-20T11:37:25Z","url":"https://github.com/cheaper-inference/OmniRoute"},{"name":"crawl4ai","owner":"unclecode","full_name":"unclecode/crawl4ai","description":"Official Crawl4AI Cloud: a hosted web scraping, extraction, and search API for AI agents. Free API key, 1,000 credits a month, no card. Fully open source: this repo is the Apache-2.0 crawler that powers it, and you can self-host it.","stars":87589,"forks":9142,"language":"Python","topics":["ai","ai-agents","crawl4ai-cloud","crawler","data-extraction","llm","markdown","mcp","open-source","playwright","python","rag","scraper","web-crawler","web-crawling","web-scraping"],"pushed_at":"2026-11-20T09:47:34Z","url":"https://github.com/unclecode/crawl4ai"},{"name":"hyperframes","owner":"heygen-com","full_name":"heygen-com/hyperframes","description":"AI video you can actually edit. HyperFrames is a free, open-source AI video editor. Describe any video and get a real project you can change down to the frame.","stars":87244,"forks":8117,"language":"TypeScript","topics":["ai","ai-agents","animation","claude-code","ffmpeg","framework","gsap","html","html-to-video","mcp","motion-graphics","puppeteer","rendering","typescript","video-editor"],"pushed_at":"2026-11-20T11:40:35Z","url":"https://github.com/heygen-com/hyperframes"},{"name":"deer-flow","owner":"bytedance","full_name":"bytedance/deer-flow","description":"An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.","stars":85543,"forks":12077,"language":"Python","topics":["agent","agentic","agentic-framework","agentic-workflow","ai","ai-agents","deep-research","harness","langchain","langgraph","langmanus","llm","multi-agent","nodejs","podcast","python","superagent","typescript"],"pushed_at":"2026-11-20T11:11:32Z","url":"https://github.com/bytedance/deer-flow"},{"name":"ruflo","owner":"ruvnet","full_name":"ruvnet/ruflo","description":"🌊 The original agent harness. Deploy intelligent multi-player swarms, coordinate autonomous workflows, and build conversational AI systems. Features adaptive memory, self-learning intelligence, federation, vector RAG integration, and native Claude Code / Codex / Hermes and many more Integrated","stars":82137,"forks":9697,"language":"TypeScript","topics":["agent-memory","agent-orchestration","agentic-ai","agentic-workflow","ai-agents","autonomous-agents","claude","claude-code","codex","hnsw","mcp","mcp-server","multi-agent","multi-agent-systems","plugins","rvf","swarm","swarm-intelligence","typescript","vector-search"],"pushed_at":"2026-11-20T04:47:14Z","url":"https://github.com/ruvnet/ruflo"},{"name":"OpenMontage","owner":"OpenMontageInc","full_name":"OpenMontageInc/OpenMontage","description":"World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.","stars":81862,"forks":11143,"language":"Python","topics":["agent","agentic-ai","ai","claude","copilot","cursor","elevenlabs","ffmpeg","flux","image-generation","open-source","openai","python","remotion","stable-diffusion","text-to-speech","text-to-video","video-generation","video-production"],"pushed_at":"2026-11-16T06:55:27Z","url":"https://github.com/OpenMontageInc/OpenMontage"},{"name":"dsh-our-free-model","owner":"Ebony-Vinyl","full_name":"Ebony-Vinyl/dsh-our-free-model","description":"在 dsh 里装上这个插件即可，无需登录、注册或填 API Key，就能使用包括 DeepSeek V4.1 Flash、Kimi K3 在内的前沿模型——完全免费，不限量。 All you do is install this plugin in dsh: no login, no sign-up, no API key — the frontier models are just there, DeepSeek V4.1 Flash and Kimi K3 among them. Completely free, with no usage cap.","stars":81675,"forks":2300,"language":"JavaScript","topics":["ai-agents","deepseek","deepseek-harness","developer-tools","dsh","dsh-plugin","free-model","llm","model-provider","openai-compatible"],"pushed_at":"2026-11-18T02:24:22Z","url":"https://github.com/Ebony-Vinyl/dsh-our-free-model"},{"name":"ai-agents-for-beginners","owner":"microsoft","full_name":"microsoft/ai-agents-for-beginners","description":"18 Lessons to Get Started Building AI Agents","stars":80563,"forks":26335,"language":"Jupyter Notebook","topics":["agentic-ai","agentic-framework","agentic-rag","ai-agents","ai-agents-framework","autogen","foundry","foundry-local","generative-ai","microsoft-foundry","semantic-kernel"],"pushed_at":"2026-11-17T09:24:01Z","url":"https://github.com/microsoft/ai-agents-for-beginners"},{"name":"ai-engineering-from-scratch","owner":"rohitg00","full_name":"rohitg00/ai-engineering-from-scratch","description":"Learn AI Engineering! Learn it. Build it. Ship it for others.","stars":79652,"forks":14235,"language":"Python","topics":["agents","ai","ai-agents","ai-engineering","computer-vision","course","deep-learning","dsh","from-scratch","generative-ai","llm","machine-learning","mcp","python","rea","reinforcement-learning","rust","transformers","tutorial","typescript"],"pushed_at":"2026-11-18T10:49:29Z","url":"https://github.com/rohitg00/ai-engineering-from-scratch"},{"name":"ai-job-search","owner":"ai-job-search-dev","full_name":"ai-job-search-dev/ai-job-search","description":"The job search that runs on your machine. AI job application framework built on Claude Code: evaluate postings, tailor CVs, write cover letters, prep interviews. Fork it and own it.","stars":72710,"forks":23342,"language":"Python","topics":["ai","ai-agents","career","claude-code","cover-letter","cv","interview-preparation","job-application","job-hunting","job-search","latex","resume"],"pushed_at":"2026-11-20T07:50:30Z","url":"https://github.com/ai-job-search-dev/ai-job-search"},{"name":"system_prompts_leaks","owner":"asgeirtj","full_name":"asgeirtj/system_prompts_leaks","description":"Leaked system prompts of ChatGPT, Claude, Gemini and more. The hidden system prompt of every popular chatbot, in full, every version since May 2025. Also Anthropic Claude Code, OpenAI Codex, Google Antigravity, xAI Grok, Meta Muse, Moonshot Kimi, Alibaba Qwen, Z.ai GLM ZCode, MiniMax, Cursor, Perplexity, DeepSeek and 30+ others. Updated daily.","stars":72144,"forks":11617,"language":"Python","topics":["ai","ai-agents","ai-prompts","anthropic","chatbot","chatgpt","claude","claude-code","codex","cursor","gemini","generative-ai","google","grok","llm","openai","prompt","prompt-engineering","system-prompt","system-prompts"],"pushed_at":"2026-11-19T09:43:47Z","url":"https://github.com/asgeirtj/system_prompts_leaks"},{"name":"oh-my-openagent","owner":"code-yeongyu","full_name":"code-yeongyu/oh-my-openagent","description":"OmO: Just type \"mass ulw\" keyword with your prompt. Now you are the master of graph engineering.","stars":71018,"forks":5843,"language":"TypeScript","topics":["ai","ai-agents","anthropic","chatgpt","claude","claude-skills","codex","cursor","gemini","ide","openai","opencode","orchestration","tui","typescript"],"pushed_at":"2026-11-20T11:04:27Z","url":"https://github.com/code-yeongyu/oh-my-openagent"},{"name":"mem0","owner":"mem0ai","full_name":"mem0ai/mem0","description":"The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps. Context that persists. Built for production.","stars":69271,"forks":8249,"language":"Python","topics":["agentic-memory","agentic-memory-system","agents","ai","ai-agents","chatgpt","genai","llm","long-term-memory","memory","memory-management","python","rag","state-management"],"pushed_at":"2026-11-18T07:24:33Z","url":"https://github.com/mem0ai/mem0"},{"name":"claude-code-best-practice","owner":"shanraisshan","full_name":"shanraisshan/claude-code-best-practice","description":"from vibe coding to agentic engineering - practice makes claude perfect","stars":69255,"forks":6887,"language":"HTML","topics":["agentic-ai","agentic-coding","agentic-engineering","agentic-workflow","ai","ai-agents","anthropic","best-practices","boris","claude","claude-ai","claude-code","claude-code-agents","claude-code-best-practices","claude-code-commands","claude-code-skills","context-engineering","pakistan","pakistani-developer","vibe-coding"],"pushed_at":"2026-11-20T06:33:19Z","url":"https://github.com/shanraisshan/claude-code-best-practice"},{"name":"anything-llm","owner":"Mintplex-Labs","full_name":"Mintplex-Labs/anything-llm","description":"Stop renting your intelligence. Own it with AnythingLLM. Everything you need for a powerful local-first agent experience ","stars":68459,"forks":7739,"language":"JavaScript","topics":["agent-computer","agent-harness","agent-orchestration","agentic-ai","agentic-workflow","ai-agents","computer-use","hermes-agent","llm","local-ai","localai","multimodal","rag","self-hosted-ai","vector-database"],"pushed_at":"2026-11-20T01:32:49Z","url":"https://github.com/Mintplex-Labs/anything-llm"},{"name":"hindsight","owner":"vectorize-io","full_name":"vectorize-io/hindsight","description":"Hindsight: Agent Memory That Learns","stars":62125,"forks":7394,"language":"Python","topics":["agentic-ai","agents","ai-memory","memory"],"pushed_at":"2026-11-20T11:29:28Z","url":"https://github.com/vectorize-io/hindsight"},{"name":"marketingskills","owner":"coreyhaines31","full_name":"coreyhaines31/marketingskills","description":"Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.","stars":61617,"forks":8986,"language":"JavaScript","topics":["agent-skills","ai-agents","ai-seo","claude","claude-code","claude-code-plugin","claude-skills","codex","content-marketing","conversion-rate-optimization","copywriting","cursor","email-marketing","generative-engine-optimization","growth-marketing","marketing","marketing-automation","saas-marketing","seo","skill-md"],"pushed_at":"2026-11-20T02:15:08Z","url":"https://github.com/coreyhaines31/marketingskills"},{"name":"crewAI","owner":"crewAIInc","full_name":"crewAIInc/crewAI","description":"Framework for orchestrating role-playing, autonomous AI agents. By fostering collaborative intelligence, CrewAI empowers agents to work together seamlessly, tackling complex tasks.","stars":61123,"forks":9232,"language":"Python","topics":["agents","ai","ai-agents","aiagentframework","llms"],"pushed_at":"2026-11-20T09:23:56Z","url":"https://github.com/crewAIInc/crewAI"},{"name":"DeepTutor","owner":"HKUDS","full_name":"HKUDS/DeepTutor","description":"DeepTutor: Lifelong Personalized Tutoring. https://deeptutor.info/.","stars":60968,"forks":7376,"language":"Python","topics":["ai-agents","ai-tutor","clawbot","cli-tool","deepresearch","interactive-learning","learning","multi-agent-systems","rag"],"pushed_at":"2026-11-20T09:35:27Z","url":"https://github.com/HKUDS/DeepTutor"},{"name":"nanobot","owner":"HKUDS","full_name":"HKUDS/nanobot","description":"Your lightweight open-source personal agent.","stars":50223,"forks":8757,"language":"Python","topics":["agent-framework","ai-agent","ai-agents","chatbot","chatops","discord-bot","llm-agents","llms","local-llm","mcp","model-context-protocol","multi-agent","openai-compatible","openclaw","personal-ai-assistant","python","self-hosted","telegram-bot-ai-assistant","webui","workflow-automation"],"pushed_at":"2026-11-20T10:48:26Z","url":"https://github.com/HKUDS/nanobot"},{"name":"gogs","owner":"gogs","full_name":"gogs/gogs","description":"The painless way to host your own Git service","stars":47959,"forks":5080,"language":"Go","topics":["agent-orchestration","agentic-ai","agentic-workflow","docker","git","go","gogs","kubernetes","mysql","postgresql","self-hosted","source-code-management","sqlite3","version-control"],"pushed_at":"2026-11-20T07:02:36Z","url":"https://github.com/gogs/gogs"},{"name":"siyuan","owner":"siyuan-note","full_name":"siyuan-note/siyuan","description":"An open-source, privacy-first, self-hosted knowledge workspace where humans and AI agents work together 开源、隐私优先、自托管的知识工作空间，让人与智能体在此协作","stars":47302,"forks":3127,"language":"TypeScript","topics":["agentic-ai","ai-agent","knowledge-base","local-first","markdown","mcp","mindmap","note-taking","self-hosted","siyuan","workspace"],"pushed_at":"2026-11-20T11:24:04Z","url":"https://github.com/siyuan-note/siyuan"},{"name":"agents","owner":"wshobson","full_name":"wshobson/agents","description":"Plugins, agents, skills, and commands for Claude Code, Codex CLI, Cursor, OpenCode, Antigravity CLI, GitHub Copilot, and Pi, written once in Markdown and adapted to each tool by generators with validation and evals.","stars":42721,"forks":4516,"language":"Python","topics":["agent-skills","agentic-ai","ai-agents","anthropic","antigravity","claude","claude-code","claude-code-marketplace","claude-code-plugin","claude-skills","codex","coding-agents","cursor","cursor-rules","github-copilot","mcp","multi-agent","opencode","pi-coding-agent","subagents"],"pushed_at":"2026-11-18T13:13:28Z","url":"https://github.com/wshobson/agents"},{"name":"PageIndex","owner":"VectifyAI","full_name":"VectifyAI/PageIndex","description":"📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG","stars":40495,"forks":3472,"language":"Python","topics":["agentic-ai","agents","ai","ai-agents","context-engineering","information-retrieval","llm","rag","reasoning","retrieval","retrieval-augmented-generation","vector-database"],"pushed_at":"2026-11-20T10:23:22Z","url":"https://github.com/VectifyAI/PageIndex"},{"name":"CopilotKit","owner":"CopilotKit","full_name":"CopilotKit/CopilotKit","description":"The Frontend Stack for Agents & Generative UI. React, Angular, Mobile, Slack, and more.  Makers of the AG-UI Protocol","stars":38843,"forks":4839,"language":"TypeScript","topics":["agent","agent-native","agentic-ai","agents","ai","ai-agent","ai-assistant","assistant","assistant-chat-bots","copilot","copilot-chat","generative-ui","js","llm","nextjs","open-source","react","reactjs","ts","typescript"],"pushed_at":"2026-11-20T11:00:38Z","url":"https://github.com/CopilotKit/CopilotKit"},{"name":"agents-course","owner":"huggingface","full_name":"huggingface/agents-course","description":"This repository contains the Hugging Face Agents Course. ","stars":35218,"forks":2528,"language":"MDX","topics":["agentic-ai","agents","course","huggingface","langchain","llamaindex","smolagents"],"pushed_at":"2026-11-17T00:53:47Z","url":"https://github.com/huggingface/agents-course"},{"name":"pentagi","owner":"vxcontrol","full_name":"vxcontrol/pentagi","description":"Fully autonomous AI Agents system capable of performing complex penetration testing tasks","stars":34663,"forks":5519,"language":"Go","topics":["ai-agents","ai-security-tool","anthropic","autonomous-agents","golang","gpt","graphql","multi-agent-system","offensive-security","open-source","openai","penetration-testing","penetration-testing-tools","react","security-automation","security-testing","security-tools","self-hosted"],"pushed_at":"2026-11-13T23:40:49Z","url":"https://github.com/vxcontrol/pentagi"},{"name":"Jobs_Applier_AI_Agent","owner":"feder-cr","full_name":"feder-cr/Jobs_Applier_AI_Agent","description":"AIHawk: AI job application bot, automated job search, job hunting, auto-apply to resume-matching jobs while you sleep.","stars":32581,"forks":4776,"language":"Python","topics":["agentic-ai","ai-agent","ai-automation","aihawk","automation","autonomous-agents","browser-automation","cv","firefox","hr","job-board","job-search","jobs","linkedin","playwright","python","recruiting","recruitment","resume","terminal-app"],"pushed_at":"2026-11-17T19:57:57Z","url":"https://github.com/feder-cr/Jobs_Applier_AI_Agent"},{"name":"composio","owner":"ComposioHQ","full_name":"ComposioHQ/composio","description":"Composio powers 1000+ toolkits, tool search, context management, authentication, and a sandboxed workbench to help you build AI agents that turn intent into action.","stars":31200,"forks":4966,"language":"TypeScript","topics":["agentic-ai","agents","ai","ai-agents","aiagents","developer-tools","function-calling","gpt-4","javascript","js","llm","llmops","mcp","python","remote-mcp-server","sse","typescript"],"pushed_at":"2026-11-20T10:56:54Z","url":"https://github.com/ComposioHQ/composio"},{"name":"hypit","owner":"hypit-ai","full_name":"hypit-ai/hypit","description":"Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.","stars":30822,"forks":3642,"language":"TypeScript","topics":["agentic-ai","ai","ai-agents","ai-video","compiler","dsl","ffmpeg","generative-ai","llm","markup-language","monorepo","plugin-system","programming-language","text-to-video","typescript","video","video-automation","video-clone","video-editing","video-generation"],"pushed_at":"2026-11-20T10:08:47Z","url":"https://github.com/hypit-ai/hypit"},{"name":"cs249r_book","owner":"harvard-edge","full_name":"harvard-edge/cs249r_book","description":"Machine Learning Systems: Foundations, Scaling, Agentic AI, and Physical AI (Vols I–IV) • Harvard CS249r | https://mlsysbook.ai","stars":30275,"forks":3746,"language":"Python","topics":["agentic-ai","ai-agents","artificial-intelligence","cloud-ml","computer-systems","courseware","deep-learning","edge-machine-learning","embedded-ml","embodied-ai","machine-learning","machine-learning-systems","mlsys","mobile-ml","physical-ai","robotics","textbook","tinyml"],"pushed_at":"2026-11-20T06:36:16Z","url":"https://github.com/harvard-edge/cs249r_book"},{"name":"claude-skills","owner":"alirezarezvani","full_name":"alirezarezvani/claude-skills","description":"410 Claude Code skills & agent skills & plugins (120+ Agents, custom commands, 410+ skills, customizable references, scripts)for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory, research, business operations, commercial & finance, and your daily productivity skills.","stars":30175,"forks":4179,"language":"Python","topics":["agent-plugins","agent-skills","agentic-ai","ai-coding-agent","anthropic-claude","claude-ai","claude-code","claude-code-plugins","claude-code-skills","claude-skills","codex-skills","coding-agent-plugins","cursor-skills","developer-tools","gemini-cli-skills","openai-codex","openclaw","openclaw-plugins","openclaw-skills","prompt-engineering"],"pushed_at":"2026-11-19T07:26:37Z","url":"https://github.com/alirezarezvani/claude-skills"},{"name":"crush","owner":"charmbracelet","full_name":"charmbracelet/crush","description":"Glamourous agentic coding for all 💘","stars":29147,"forks":2383,"language":"Go","topics":["agentic-ai","ai","llms","ravishing"],"pushed_at":"2026-11-20T08:23:03Z","url":"https://github.com/charmbracelet/crush"},{"name":"agenticSeek","owner":"Fosowl","full_name":"Fosowl/agenticSeek","description":"Fully Local Manus AI. No APIs, No $200 monthly bills. Enjoy an autonomous agent that thinks, browses the web, and code for the sole cost of electricity.","stars":27679,"forks":3109,"language":"Python","topics":["agentic-ai","agents","ai","autonomous-agents","deepseek-r1","llm","llm-agents","voice-assistant"],"pushed_at":"2026-11-17T18:33:26Z","url":"https://github.com/Fosowl/agenticSeek"},{"name":"haystack","owner":"deepset-ai","full_name":"deepset-ai/haystack","description":"Open-source AI orchestration framework for building context-engineered, production-ready LLM applications. Design modular pipelines and agent workflows with explicit control over retrieval, routing, memory, and generation. Built for scalable agents, RAG, multimodal applications, semantic search, and conversational systems.","stars":27060,"forks":3483,"language":"Python","topics":["agent-framework","agentic-ai","agentic-rag","agents","ai","ai-agents","context-engineering","framework","genai","generative-ai","information-retrieval","large-language-models","llm","mcp","multi-agent","orchestration","python","rag","retrieval-augmented-generation","semantic-search"],"pushed_at":"2026-11-20T11:11:34Z","url":"https://github.com/deepset-ai/haystack"},{"name":"SkillSpector","owner":"NVIDIA","full_name":"NVIDIA/SkillSpector","description":"Security scanner for AI agent skills. Detect vulnerabilities, malicious patterns, security risks, prompt injection, data exfiltration, and supply-chain risks in Claude Code, Codex, and MCP skills before you install them.","stars":27010,"forks":2401,"language":"Python","topics":["agent-security","agent-skills","agentic-ai","ai-security","claude-code","mcp","prompt-injection","security-scanner","security-tools","security-workflow","supply-chain-security"],"pushed_at":"2026-11-19T14:51:51Z","url":"https://github.com/NVIDIA/SkillSpector"},{"name":"learn-harness-engineering","owner":"walkinglabs","full_name":"walkinglabs/learn-harness-engineering","description":"Harness engineering beginner tutorial, from 0 to 1","stars":25637,"forks":2945,"language":"TypeScript","topics":["agent","agentic","agentic-ai","ai","ai-agent","ai-agents","dsh","dsh-plugin","harness","harness-engineering","harness-framework","llm"],"pushed_at":"2026-11-15T03:03:40Z","url":"https://github.com/walkinglabs/learn-harness-engineering"},{"name":"nocobase","owner":"nocobase","full_name":"nocobase/nocobase","description":"NocoBase is the open-source platform for building, running, and evolving business systems with AI. Agents write the code and do the work, NocoBase provides the foundation and governance, and people make the decisions.","stars":24971,"forks":2956,"language":"TypeScript","topics":["admin-dashboard","agent-skills","agentic-ai","ai-agent","ai-agents","ai-governance","claude-code","codex","crm","crud","erp","internal-tools","low-code","no-code","opencode","rbac","self-hosted","vibe-coding","workflow-engine","workflows"],"pushed_at":"2026-11-20T09:50:06Z","url":"https://github.com/nocobase/nocobase"},{"name":"MaxKB","owner":"1Panel-dev","full_name":"1Panel-dev/MaxKB","description":"🔥 MaxKB is an open-source platform for building enterprise-grade agents.  强大易用的开源企业级智能体平台。","stars":23178,"forks":3229,"language":"Python","topics":["agent","agentic-ai","chatbot","deepseek-r1","knowledgebase","langchain","llama3","llm","maxkb","mcp-server","ollama","pgvector","qwen3","rag"],"pushed_at":"2026-11-20T11:03:18Z","url":"https://github.com/1Panel-dev/MaxKB"},{"name":"adk-python","owner":"google","full_name":"google/adk-python","description":"An open-source, code-first Python toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.","stars":22278,"forks":4396,"language":"Python","topics":["agent","agentic","agentic-ai","agents","agents-sdk","ai","ai-agents","aiagentframework","genai","genai-chatbot","llm","llms","multi-agent","multi-agent-systems","multi-agents","multi-agents-collaboration"],"pushed_at":"2026-11-20T06:29:45Z","url":"https://github.com/google/adk-python"},{"name":"agents-towards-production","owner":"NirDiamant","full_name":"NirDiamant/agents-towards-production","description":"End-to-end, code-first tutorials for building production-grade GenAI agents. From prototype to enterprise deployment.","stars":21933,"forks":2895,"language":"Jupyter Notebook","topics":["agent","agent-framework","agentic-ai","agents","ai-agents","deployment","genai","generative-ai","langgraph","llm","llms","mcp","mlops","multi-agent-systems","observability","production","python","rag","tutorials"],"pushed_at":"2026-11-15T15:18:58Z","url":"https://github.com/NirDiamant/agents-towards-production"},{"name":"hermes-desktop","owner":"fathah","full_name":"fathah/hermes-desktop","description":"Desktop Companion for Hermes Agent","stars":14609,"forks":1639,"language":"TypeScript","topics":["ai","ai-agent","autonomous-agents","chatbot","hermes","llm"],"pushed_at":"2026-11-18T06:21:02Z","url":"https://github.com/fathah/hermes-desktop"},{"name":"ARTEX","owner":"BaaRai","full_name":"BaaRai/ARTEX","description":"ARTEX - AI autonomous penetration testing system (English translation; upstream: Autumn-27/ARTEX, AGPL-3.0)","stars":12791,"forks":5091,"language":"Go","topics":["ai","ai-agents","autonomous-agents","bug-bounty","docker","golang","linux","llm","mcp","nextjs","penetration-testing","pentest","postgresql","rea","react","red-team","security","security-automation","sqlite","typescript"],"pushed_at":"2026-11-20T07:28:06Z","url":"https://github.com/BaaRai/ARTEX"},{"name":"brigade","owner":"spinabot","full_name":"spinabot/brigade","description":"Brigade — Your personal intelligence, built enterprise-grade","stars":11387,"forks":83,"language":"TypeScript","topics":["agent-runtime","ai","ai-crew","autonomous-agents","brigade","brigade-agent","chatgpt","clawdbot","codex","crustacean","hermes","hermes-agent","llm","moltbot","molty","multi-agent","openclaw","pride-of-agents","self-improving-ai","spinabot"],"pushed_at":"2026-11-13T04:10:20Z","url":"https://github.com/spinabot/brigade"},{"name":"hive","owner":"aden-hive","full_name":"aden-hive/hive","description":"Multi-Agent Harness for Production AI","stars":11168,"forks":5632,"language":"Python","topics":["agent","agent-framework","agent-skills","anthropic","automation","autonomous-agents","claude","harness","harness-engineering","human-in-the-loop","openai","python","self-hosted","self-improving"],"pushed_at":"2026-11-17T17:53:37Z","url":"https://github.com/aden-hive/hive"}]}</script>
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+  var ESC = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return ESC[c]; }); }
+  function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function fmt(n){
+    n = +n || 0;
+    if (n >= 1e6) return (n/1e6).toFixed(n >= 1e7 ? 0 : 1).replace(/\.0$/,"") + "M";
+    if (n >= 1e3) return (n/1e3).toFixed(n >= 1e5 ? 0 : 1).replace(/\.0$/,"") + "k";
+    return String(n);
+  }
+  function ago(iso){
+    var t = Date.parse(iso); if (isNaN(t)) return "";
+    var ref = Date.parse(state.generated) || Date.now();
+    var h = Math.max(0, (ref - t) / 36e5);
+    if (h < 1) return "pushed <1h ago";
+    if (h < 48) return "pushed " + Math.round(h) + "h ago";
+    return "pushed " + Math.round(h/24) + "d ago";
+  }
+  function safeUrl(u){ return /^https:\/\/github\.com\//.test(String(u)) ? String(u) : "#"; }
+
+  function valid(d){ return d && typeof d === "object" && Array.isArray(d.repos) && d.repos.length > 0 &&
+    d.repos.every(function(r){ return r && typeof r.full_name === "string"; }); }
+  function norm(r){
+    return { name: String(r.name || r.full_name.split("/")[1] || ""), owner: String(r.owner || r.full_name.split("/")[0] || ""),
+      full_name: r.full_name, description: r.description ? String(r.description) : "",
+      stars: +r.stars || 0, forks: +r.forks || 0, language: r.language ? String(r.language) : "",
+      topics: Array.isArray(r.topics) ? r.topics.map(String) : [], pushed_at: String(r.pushed_at || ""), url: r.url };
+  }
+
+  var state = { repos: [], generated: "", sort: "stars", dir: "desc", langs: new Set(), topics: new Set(), q: "", rank: {} };
+
+  function load(d, source){
+    var seen = {}, list = [];
+    d.repos.forEach(function(r){ if (!seen[r.full_name]) { seen[r.full_name] = 1; list.push(norm(r)); } });
+    list.sort(function(a,b){ return b.stars - a.stars; });
+    state.rank = {}; list.forEach(function(r,i){ state.rank[r.full_name] = i + 1; });
+    state.repos = list; state.generated = d.generated_at || "";
+    state.maxStars = list.length ? list[0].stars : 1;
+    var dt = new Date(state.generated);
+    var label = isNaN(dt) ? "unknown" : dt.toLocaleDateString(undefined, {year:"numeric", month:"short", day:"numeric"});
+    $("snap").textContent = label;
+    $("src").textContent = source;
+    $("srcpill").classList.toggle("live", source === "refreshed");
+    $("foot-snap").textContent = "Snapshot " + (state.generated || "n/a") + " · " + source;
+    $("total").textContent = list.length;
+    // drop selections that no longer exist
+    buildChips();
+    render();
+  }
+
+  function counts(key){
+    var m = {};
+    state.repos.forEach(function(r){
+      var vals = key === "language" ? [r.language || "Other"] : r.topics;
+      vals.forEach(function(v){ m[v] = (m[v] || 0) + 1; });
+    });
+    return Object.keys(m).map(function(k){ return [k, m[k]]; }).sort(function(a,b){ return b[1]-a[1] || a[0].localeCompare(b[0]); });
+  }
+  function chipHTML(kind, v, n, on){
+    return '<button type="button" class="chip" data-kind="' + kind + '" data-v="' + esc(v) + '" aria-pressed="' + on + '" title="' + esc(v) + '">' + esc(v) + '<small>' + n + '</small></button>';
+  }
+  function buildChips(){
+    var langs = counts("language"), topics = counts("topics").filter(function(t){ return t[1] >= 2; }).slice(0, 40);
+    var lv = {}; langs.forEach(function(l){ lv[l[0]] = 1; });
+    var tv = {}; topics.forEach(function(t){ tv[t[0]] = 1; });
+    state.langs.forEach(function(v){ if (!lv[v]) state.langs.delete(v); });
+    state.topics.forEach(function(v){ if (!tv[v]) state.topics.delete(v); });
+    $("langs").innerHTML = langs.map(function(l){ return chipHTML("lang", l[0], l[1], state.langs.has(l[0])); }).join("");
+    $("topics").innerHTML = topics.map(function(t){ return chipHTML("topic", t[0], t[1], state.topics.has(t[0])); }).join("");
+  }
+
+  function hl(text, q){
+    var s = esc(text);
+    if (!q) return s;
+    return s.replace(new RegExp("(" + escRe(esc(q)) + ")", "ig"), "<mark>$1</mark>");
+  }
+
+  function filtered(){
+    var q = state.q.toLowerCase();
+    var out = state.repos.filter(function(r){
+      if (state.langs.size && !state.langs.has(r.language || "Other")) return false;
+      if (state.topics.size) { for (var t of state.topics) if (r.topics.indexOf(t) < 0) return false; }
+      if (q) {
+        var hay = (r.full_name + " " + r.description + " " + r.topics.join(" ") + " " + r.language).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+    var k = state.sort, m = state.dir === "asc" ? 1 : -1;
+    out.sort(function(a,b){
+      var c;
+      if (k === "name") c = a.name.localeCompare(b.name, undefined, {sensitivity:"base"});
+      else if (k === "pushed") c = (Date.parse(a.pushed_at) || 0) - (Date.parse(b.pushed_at) || 0);
+      else c = a[k] - b[k];
+      return (c * m) || (b.stars - a.stars);
+    });
+    return out;
+  }
+
+  function card(r, i){
+    var q = state.q;
+    var w = Math.max(3, Math.round(Math.sqrt(r.stars / state.maxStars) * 100));
+    var topics = r.topics.slice(0, 6).map(function(t){
+      return '<span class="ctopic' + (state.topics.has(t) ? " hit" : "") + '">' + hl(t, q) + '</span>';
+    }).join("");
+    return '<article class="card" data-id="' + esc(r.full_name) + '" style="--i:' + Math.min(i, 24) + '">' +
+      '<div class="card-top"><span class="rank" aria-label="Rank ' + state.rank[r.full_name] + '">' + String(state.rank[r.full_name]).padStart(2, "0") + '</span>' +
+      '<div class="title"><div class="owner">' + hl(r.owner, q) + ' /</div>' +
+      '<h2 class="name"><a href="' + esc(safeUrl(r.url)) + '" target="_blank" rel="noopener noreferrer">' + hl(r.name, q) + '</a></h2></div></div>' +
+      (r.description ? '<p class="desc">' + hl(r.description, q) + '</p>' : '<p class="desc none">No description provided.</p>') +
+      '<div class="heat"><div class="heat-row"><span class="stars">' + fmt(r.stars) + '</span><span>' + fmt(r.forks) + ' forks</span></div>' +
+      '<div class="track" role="img" aria-label="' + fmt(r.stars) + ' stars relative to top repo"><div class="fill" style="--w:' + w + '%"></div></div></div>' +
+      (topics ? '<div class="ctopics">' + topics + '</div>' : '') +
+      '<div class="foot"><span class="lang">' + esc(r.language || "Other") + '</span><span class="ago">' + esc(ago(r.pushed_at)) + '</span></div>' +
+      '</article>';
+  }
+
+  function render(){
+    var list = filtered();
+    var grid = $("grid");
+    grid.innerHTML = list.map(card).join("");
+    var pristine = state.sort === "stars" && state.dir === "desc" && !state.q && !state.langs.size && !state.topics.size;
+    grid.classList.toggle("hero", pristine && list.length > 2);
+    $("count").textContent = list.length;
+    $("empty").classList.toggle("show", list.length === 0);
+    var n = state.langs.size + state.topics.size;
+    $("fcount").textContent = n ? String(n) : "";
+    document.querySelectorAll("[data-sort]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.sort === state.sort)); });
+    $("dir").textContent = state.dir === "desc" ? "↓ desc" : "↑ asc";
+  }
+
+  function reset(){
+    state.langs.clear(); state.topics.clear(); state.q = ""; $("q").value = "";
+    state.sort = "stars"; state.dir = "desc";
+    document.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed", "false"); });
+    render();
+  }
+
+  // events
+  var t;
+  $("q").addEventListener("input", function(e){ clearTimeout(t); t = setTimeout(function(){ state.q = e.target.value.trim(); render(); }, 80); });
+  document.querySelector(".sorts").addEventListener("click", function(e){
+    var b = e.target.closest("[data-sort]");
+    if (b) {
+      if (state.sort === b.dataset.sort) state.dir = state.dir === "desc" ? "asc" : "desc";
+      else { state.sort = b.dataset.sort; state.dir = b.dataset.sort === "name" ? "asc" : "desc"; }
+      render();
+    } else if (e.target.closest("#dir")) { state.dir = state.dir === "desc" ? "asc" : "desc"; render(); }
+  });
+  $("filters").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if (!c) return;
+    var set = c.dataset.kind === "lang" ? state.langs : state.topics, v = c.dataset.v;
+    if (set.has(v)) set.delete(v); else set.add(v);
+    c.setAttribute("aria-pressed", String(set.has(v)));
+    render();
+  });
+  $("clear").addEventListener("click", reset);
+  $("clear2").addEventListener("click", reset);
+  $("ftoggle").addEventListener("click", function(){
+    var open = this.getAttribute("aria-expanded") !== "true";
+    this.setAttribute("aria-expanded", String(open));
+    $("filters").classList.toggle("open", open);
+  });
+
+  // boot: embedded snapshot first, then try refresh
+  var seed = null;
+  try { seed = JSON.parse($("seed").textContent); } catch (e) { seed = null; }
+  if (valid(seed)) load(seed, "embedded");
+  else { $("empty").classList.add("show"); }
+
+  try {
+    if (location.protocol === "http:" || location.protocol === "https:") {
+      fetch("data.json", { cache: "no-store" })
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(d){ if (valid(d)) load(d, "refreshed"); })
+        .catch(function(){ /* keep embedded snapshot */ });
+    }
+  } catch (e) { /* keep embedded snapshot */ }
+})();
+</script>
+</body>
+</html>
